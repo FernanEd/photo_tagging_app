@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { firestore } from "../../firebase/config";
+import Modal from "../common/Modal/Modal";
 import TargetMenu from "../common/TargetMenu/TargetMenu";
+import Toast from "../common/Toast/Toast";
 import useModal from "../hooks/useModal";
+import useToast from "../hooks/useToast";
 
 interface Props {}
 
@@ -22,8 +25,9 @@ const Game: React.FunctionComponent<Props> = () => {
   const [targetMenu, toggleTargetMenu] = useModal(false);
   const [mousePosition, setMousePosition] = useState<[number, number]>([0, 0]);
   const [menuPosition, setMenuPosition] = useState<[number, number]>([0, 0]);
-
   const [loadingGame, setLoadingGame] = useState(true);
+
+  const [toastMSG, toastShow, toastVariant, toastDisplay] = useToast();
 
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -55,14 +59,17 @@ const Game: React.FunctionComponent<Props> = () => {
     toggleTargetMenu();
   };
 
-  const handleMenuSelection = ([targetX, targetY]: [number, number]) => {
+  const handleMenuSelection = (target: LevelTarget) => {
+    const {
+      name,
+      coords: [targetX, targetY],
+    } = target;
+
     if (imgRef.current) {
       const clickX =
         (img.width * mousePosition[0]) / imgRef.current.offsetWidth;
       const clickY =
         (img.height * mousePosition[1]) / imgRef.current.offsetHeight;
-
-      console.log(clickX, clickY, targetX, targetY);
 
       const threshold = 100;
       const clickMatch =
@@ -70,9 +77,10 @@ const Game: React.FunctionComponent<Props> = () => {
         Math.abs(targetY - clickY) < threshold;
 
       if (clickMatch) {
-        console.log("sucess");
+        setTargets((prev) => prev.filter((target) => target.name !== name));
+        toastDisplay(`You found ${name}!`, 3000, "success");
       } else {
-        console.log("failure");
+        toastDisplay("Keep looking", 3000, "danger");
       }
     }
 
@@ -83,6 +91,8 @@ const Game: React.FunctionComponent<Props> = () => {
     <p>Loading...</p>
   ) : (
     <>
+      {toastShow && <Toast message={toastMSG} variant={toastVariant} />}
+
       {targetMenu && (
         <TargetMenu
           position={menuPosition}

@@ -3,7 +3,7 @@ import { LevelTarget } from "../../layouts/Game";
 interface Props {
   position: [number, number];
   targets: LevelTarget[];
-  handleMenuSelection: ([x, y]: [number, number]) => void;
+  handleMenuSelection: (target: LevelTarget) => void;
 }
 
 const TargetMenu: React.FunctionComponent<Props> = ({
@@ -11,7 +11,6 @@ const TargetMenu: React.FunctionComponent<Props> = ({
   targets,
   handleMenuSelection,
 }) => {
-  const offset = 5;
   const [x, y] = position;
 
   const menuToLeft = x < window.innerWidth / 2;
@@ -37,7 +36,7 @@ const TargetMenu: React.FunctionComponent<Props> = ({
           <li
             key={i}
             className="p-1 bg-gray-600 text-center rounded cursor-pointer hover:bg-gray-500"
-            onClick={() => handleMenuSelection(target.coords)}
+            onClick={() => handleMenuSelection(target)}
           >
             {target.name}
           </li>
