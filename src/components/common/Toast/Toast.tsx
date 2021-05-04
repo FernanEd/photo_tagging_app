@@ -7,9 +7,14 @@ const modalBG = document.createElement("div");
 interface Props {
   message: string;
   variant: "success" | "warning" | "danger" | "default";
+  extendStyle?: string;
 }
 
-const Toast: React.FunctionComponent<Props> = ({ variant, message }) => {
+const Toast: React.FunctionComponent<Props> = ({
+  variant,
+  message,
+  extendStyle,
+}) => {
   const elRef = useRef(modalBG);
 
   useEffect(() => {
@@ -33,7 +38,9 @@ const Toast: React.FunctionComponent<Props> = ({ variant, message }) => {
           default:
             return "bg-gray-600 text-white";
         }
-      })()}`}
+      })()}
+        ${extendStyle}
+      `}
     >
       {message}
     </div>,
