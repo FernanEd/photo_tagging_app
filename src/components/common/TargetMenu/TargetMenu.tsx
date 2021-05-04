@@ -12,11 +12,8 @@ const TargetMenu: React.FunctionComponent<Props> = ({
   handleMenuSelection,
 }) => {
   const [x, y] = position;
-
   const menuToLeft = x < window.innerWidth / 2;
   const menuToTop = y < window.innerHeight / 2;
-
-  console.log(x, y, menuToLeft, menuToTop);
 
   let positionStyle = {
     left: x,

@@ -10,9 +10,14 @@ modalBG.setAttribute(
 
 interface Props {
   toggle?: Function;
+  [x: string]: any;
 }
 
-const Modal: React.FunctionComponent<Props> = ({ children, toggle }) => {
+const Modal: React.FunctionComponent<Props> = ({
+  children,
+  toggle,
+  ...props
+}) => {
   const elRef = useRef(modalBG);
 
   const toggleOutsideModal = (e: any) => {
@@ -34,7 +39,9 @@ const Modal: React.FunctionComponent<Props> = ({ children, toggle }) => {
   }, []);
 
   return ReactDOM.createPortal(
-    <div className="bg-white">{children}</div>,
+    <div className="bg-white" {...props}>
+      {children}
+    </div>,
     elRef.current
   );
 };
