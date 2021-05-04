@@ -8,7 +8,10 @@ import Toast from "../common/Toast/Toast";
 import useModal from "../hooks/useModal";
 import useToast from "../hooks/useToast";
 
-interface Props {}
+interface Props {
+  startGame: Function;
+  makeGameOver: Function;
+}
 
 export interface LevelImg {
   url: string;
@@ -21,7 +24,7 @@ export interface LevelTarget {
   name: string;
 }
 
-const Game: React.FunctionComponent<Props> = () => {
+const Game: React.FunctionComponent<Props> = ({ startGame, makeGameOver }) => {
   const imgRef = useRef<HTMLImageElement>(null);
 
   // History
@@ -34,8 +37,6 @@ const Game: React.FunctionComponent<Props> = () => {
   const [username, setUsername] = useState<string>("");
 
   // Game State
-  const [gameRunning, setGameRunning] = useState(false);
-
   const [loadingGame, setLoadingGame] = useState(true);
   const [mousePosition, setMousePosition] = useState<[number, number]>([0, 0]);
   const [menuPosition, setMenuPosition] = useState<[number, number]>([0, 0]);
@@ -118,7 +119,7 @@ const Game: React.FunctionComponent<Props> = () => {
         console.log(gameID);
         setGameID(gameID);
         toggleRulesModal();
-        setGameRunning(true);
+        startGame();
       } catch (err) {
         console.error(err);
       }
@@ -134,7 +135,7 @@ const Game: React.FunctionComponent<Props> = () => {
           end_time: getTimestamp(),
         });
 
-        setGameRunning(false);
+        makeGameOver();
         toggleRecordModal();
       } catch (err) {
         console.error(err);
@@ -163,7 +164,7 @@ const Game: React.FunctionComponent<Props> = () => {
   };
 
   return loadingGame ? (
-    <p>Loading...</p>
+    <p className="text-center">Loading...</p>
   ) : (
     <>
       {rulesModal && (
@@ -228,8 +229,6 @@ const Game: React.FunctionComponent<Props> = () => {
           handleMenuSelection={handleMenuSelection}
         />
       )}
-
-      <Timer go={true} />
 
       <img
         src="https://firebasestorage.googleapis.com/v0/b/photo-tagging-app-e4b42.appspot.com/o/nMpQXwq.jpg?alt=media&token=6898d10e-f356-410c-b2fa-f202eda9b53f"

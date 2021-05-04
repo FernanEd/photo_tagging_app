@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Game from "./components/layouts/Game";
 import Leaderboard from "./components/layouts/Leaderboard";
+import MainGame from "./components/layouts/MainGame";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -9,7 +10,7 @@ const App: React.FunctionComponent = () => {
       <Router>
         <Switch>
           <Route path="/" exact={true}>
-            <Game />
+            <MainGame />
           </Route>
           <Route path="/leaderboard" exact={true}>
             <Leaderboard />
